@@ -270,6 +270,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 if (item.isNotEmpty) {
                                   try {
                                     int num = int.tryParse(item.trim())!;
+                                    if (num < 0) num = num * (-1);
                                     listaF.add(num);
                                   } catch (e) {
                                     listaF.clear();
@@ -294,6 +295,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
                             try {
                               tamCache = int.tryParse(value)!;
+                              if (tamCache! < 1) {
+                                return 'Não pode ser menor que 0';
+                              }
                             } catch (e) {
                               return 'Insira apenas um número inteiro';
                             }

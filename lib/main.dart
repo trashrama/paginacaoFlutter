@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         hit++;
       } else {
         miss++;
-        if (listaMemoria.length < tamanho) {
+        if (listaMemoria.length <= tamanho) {
           listaMemoria.add(pag);
         } else {
           listaMemoria.removeAt(random.nextInt(listaMemoria.length));
@@ -68,36 +68,30 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       }
     }
+    listaMemoria.clear();
     return [hit, miss];
   }
 
   List<int> lru(List<int> paginas, int tamanho) {
-    Map<int, int> listaMemoria = {};
+    List<int> listaMemoria = [];
     int hit = 0, miss = 0;
-    int totalUsos = 0;
+
     for (var pag in paginas) {
-      if (listaMemoria.containsKey(pag))
+      int index = listaMemoria.indexOf(pag);
+      if (index != -1) {
         hit++;
-      else
-        miss++;
-
-      if (listaMemoria.length < tamanho) {
-        listaMemoria[pag] = ++totalUsos;
+        listaMemoria.remove(index);
       } else {
-        int menor = 9999999999999;
-        int? chaveMenor;
-        listaMemoria.forEach((key, value) {
-          if (value < menor) {
-            menor = value;
-            chaveMenor = key;
-          }
-        });
-
-        listaMemoria.remove(chaveMenor);
-        listaMemoria[pag] = ++totalUsos;
+        miss++;
+      }
+      if (listaMemoria.length < tamanho) {
+        listaMemoria.insert(0, pag);
+      } else {
+        listaMemoria.removeAt(listaMemoria.length - 1);
+        listaMemoria.insert(0, pag);
       }
     }
-
+    listaMemoria.clear();
     return [hit, miss];
   }
 
@@ -124,10 +118,12 @@ class _MyHomePageState extends State<MyHomePage> {
           });
 
           listaMemoria.remove(chaveMenor);
+          listaMemoria[pag] = 1;
         }
       }
     }
 
+    listaMemoria.clear();
     return [hit, miss];
   }
 
@@ -154,6 +150,8 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       }
     }
+
+    listaMemoria.clear();
     return [hit, miss];
   }
 
@@ -183,7 +181,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     if (missAndHit.isNotEmpty) {
-      print('hahaha sacanage');
       return 'Total de HITS: ${missAndHit[0]}\nTotal de MISSES: ${missAndHit[1]}';
     } else {
       return 'Ocorreu um erro ao executar o algoritmo de paginação.';
@@ -206,129 +203,150 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFB967FF),
-      appBar: AppBar(
-        toolbarHeight: 120,
-        backgroundColor: const Color(0xFFFF71CE),
-        centerTitle: true,
-        title: ValueListenableBuilder<String>(
-          valueListenable: titleNotifier,
-          builder: (context, value, child) {
-            final titulo = 'Algoritmos de Paginação: $dropdownValue';
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  titulo,
-                  style:
-                      const TextStyle(fontSize: 60, color: Color(0xFFFFFB96)),
-                ),
-                const Text(
-                  'voce um dia me paga',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'IBM Plex Sans',
-                      color: Color(0xFF26D493)),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text('Digite a sequência de páginas:'),
-              TextFormField(
-                decoration: const InputDecoration(labelText: '1, 2, 3, 4'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Insira uma sequência de números separados por espaço, ou vírgula!';
-                  } else {
-                    if (value.contains(',')) {
-                      _entradaPages = value.split(',').toList();
-                    } else if (value.contains(' ')) {
-                      _entradaPages = value.split(' ').toList();
-                    } else {
-                      _entradaPages = [value];
-                    }
-
-                    if (_entradaPages.isNotEmpty || _entradaPages == []) {
-                      for (var item in _entradaPages) {
-                        if (item.isNotEmpty) {
-                          try {
-                            int num = int.tryParse(item.trim())!;
-                            listaF.add(num);
-                          } catch (e) {
-                            listaF.clear();
-                            return 'Insira APENAS valores inteiros separados por espaço ou por vírgula!';
-                          }
-                        }
-                      }
-                    }
-                  }
-                  return null;
-                },
-              ),
-              const Text('Digite o tamanho do cache da memória'),
-              TextFormField(
-                  decoration:
-                      const InputDecoration(labelText: 'Um número inteiro'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Insira apenas um número inteiro';
-                    }
-
-                    try {
-                      tamCache = int.tryParse(value)!;
-                    } catch (e) {
-                      return 'Insira apenas um número inteiro';
-                    }
-                    return null;
-                  }),
-              DropdownButton<String>(
-                value: dropdownValue,
-                icon: const Icon(Icons.keyboard_arrow_down),
-                items: dropdownItems.map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    dropdownValue = newValue!;
-                    titleNotifier.value =
-                        'Algoritmos de Paginação: $newValue'; // Atualiza o valor do título
-                  });
-                },
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    // Faça algo com os valores do formulário
-                    resultado = rodaAlgoritmo(
-                        lista: listaF,
-                        tamanho: tamCache!,
-                        algoritmoUsado: dropdownValue);
-                  }
-                },
-                child: const Text('Enviar'),
-              ),
-              if (resultado != null)
-                Text(
-                  resultado!,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-            ],
+        backgroundColor: const Color(0xFFB967FF),
+        appBar: AppBar(
+          toolbarHeight: 120,
+          backgroundColor: const Color(0xFFFF71CE),
+          centerTitle: true,
+          title: ValueListenableBuilder<String>(
+            valueListenable: titleNotifier,
+            builder: (context, value, child) {
+              final titulo = 'Paginação: $dropdownValue';
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    titulo,
+                    style:
+                        const TextStyle(fontSize: 60, color: Color(0xFFFFFB96)),
+                  ),
+                  const Text(
+                    'voce um dia me paga',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'IBM Plex Sans',
+                        color: Color(0xFF26D493)),
+                  ),
+                ],
+              );
+            },
           ),
         ),
-      ),
-    );
+        body: Center(
+          child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 40),
+              child: Container(
+                width: 400,
+                padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      const Text('Digite a sequência de páginas:'),
+                      TextFormField(
+                        decoration:
+                            const InputDecoration(labelText: '1, 2, 3, 4'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Insira uma sequência de números separados por espaço, ou vírgula!';
+                          } else {
+                            if (value.contains(',')) {
+                              _entradaPages = value.split(',').toList();
+                            } else if (value.contains(' ')) {
+                              _entradaPages = value.split(' ').toList();
+                            } else {
+                              _entradaPages = [value];
+                            }
+
+                            if (_entradaPages.isNotEmpty ||
+                                _entradaPages == []) {
+                              for (var item in _entradaPages) {
+                                if (item.isNotEmpty) {
+                                  try {
+                                    int num = int.tryParse(item.trim())!;
+                                    listaF.add(num);
+                                  } catch (e) {
+                                    listaF.clear();
+                                    return 'Insira APENAS valores inteiros separados por espaço ou por vírgula!';
+                                  }
+                                }
+                              }
+                            }
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      const Text('Digite o tamanho do cache da memória'),
+                      TextFormField(
+                          decoration: const InputDecoration(
+                              labelText: 'Um número inteiro'),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Insira apenas um número inteiro';
+                            }
+
+                            try {
+                              tamCache = int.tryParse(value)!;
+                            } catch (e) {
+                              return 'Insira apenas um número inteiro';
+                            }
+                            return null;
+                          }),
+                      DropdownButton<String>(
+                        value: dropdownValue,
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: dropdownItems.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownValue = newValue!;
+                            titleNotifier.value =
+                                'Paginação: $newValue'; // Atualiza o valor do título
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            // Faça algo com os valores do formulário
+                            resultado = rodaAlgoritmo(
+                                lista: listaF,
+                                tamanho: tamCache!,
+                                algoritmoUsado: dropdownValue);
+                            _entradaPages.clear();
+                            listaF.clear();
+
+                            setState(() {}); // Atualiza o estado
+                          }
+                        },
+                        child: const Text('Enviar'),
+                      ),
+                      const SizedBox(height: 16),
+                      const SizedBox(height: 16),
+                      if (resultado != null)
+                        Text(
+                          resultado!,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        )
+                      //resultado = '',
+                    ],
+                  ),
+                ),
+              )),
+        ));
   }
 }

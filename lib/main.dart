@@ -203,31 +203,44 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xFFB967FF),
+        backgroundColor: Color.fromARGB(255, 221, 214, 226),
         appBar: AppBar(
           toolbarHeight: 120,
-          backgroundColor: const Color(0xFFFF71CE),
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
           centerTitle: true,
           title: ValueListenableBuilder<String>(
             valueListenable: titleNotifier,
             builder: (context, value, child) {
-              final titulo = 'Paginação: $dropdownValue';
+              final titulo = dropdownValue;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     titulo,
-                    style:
-                        const TextStyle(fontSize: 60, color: Color(0xFFFFFB96)),
+                    style: const TextStyle(
+                      fontSize: 60,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                      fontFamily: 'IBM_Plex_Sans',
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.normal,
+                    ),
                   ),
-                  const Text(
-                    'voce um dia me paga',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'IBM Plex Sans',
-                        color: Color(0xFF26D493)),
-                  ),
+                  Container(
+                    width: 50,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xFFB967FF),
+                          const Color(0xFFFF71CE)
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  )
                 ],
               );
             },
@@ -248,13 +261,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      const Text('Digite a sequência de páginas:'),
+                      const Text('Digite a sequência de páginas:',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontFamily: 'Raleway',
+                            fontWeight: FontWeight.w300,
+                            fontStyle: FontStyle.normal,
+                          )),
                       TextFormField(
-                        decoration:
-                            const InputDecoration(labelText: '1, 2, 3, 4'),
+                        style:
+                            const TextStyle(color: Color.fromRGBO(0, 0, 0, 1)),
+                        decoration: const InputDecoration(
+                          labelText: '1, 2, 3, 4',
+                          labelStyle:
+                              TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6)),
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 115, 17, 201)),
+                          ),
+                        ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Insira uma sequência de números separados por espaço, ou vírgula!';
+                            return 'Insira uma sequência de números!';
                           } else {
                             if (value.contains(',')) {
                               _entradaPages = value.split(',').toList();
@@ -286,8 +316,18 @@ class _MyHomePageState extends State<MyHomePage> {
                       const SizedBox(height: 16),
                       const Text('Digite o tamanho do cache da memória'),
                       TextFormField(
+                          style: const TextStyle(
+                              color: Color.fromRGBO(0, 0, 0, 1)),
                           decoration: const InputDecoration(
-                              labelText: 'Um número inteiro'),
+                            labelText: 'Um número inteiro',
+                            labelStyle:
+                                TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6)),
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 115, 17, 201)),
+                            ),
+                          ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Insira apenas um número inteiro';
@@ -306,6 +346,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       DropdownButton<String>(
                         value: dropdownValue,
                         icon: const Icon(Icons.keyboard_arrow_down),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        dropdownColor: Colors.purple[50],
                         items: dropdownItems.map((String item) {
                           return DropdownMenuItem<String>(
                             value: item,
@@ -338,6 +380,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         child: const Text('Enviar'),
                       ),
+
                       const SizedBox(height: 16),
                       const SizedBox(height: 16),
                       if (resultado != null)

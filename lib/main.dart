@@ -251,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.symmetric(vertical: 40),
               child: Container(
                 width: 400,
-                padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                padding: const EdgeInsets.fromLTRB(16.0, 32.0, 16.0, 0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16.0),
@@ -277,6 +277,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           labelStyle:
                               TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6)),
                           floatingLabelBehavior: FloatingLabelBehavior.never,
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                            color: Color(0xFFFF71CE),
+                          )),
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                                 color: Color.fromARGB(255, 115, 17, 201)),
@@ -313,7 +317,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(
+                          height: 20), // separar os itens do container
                       const Text('Digite o tamanho do cache da memória'),
                       TextFormField(
                           style: const TextStyle(
@@ -323,11 +328,16 @@ class _MyHomePageState extends State<MyHomePage> {
                             labelStyle:
                                 TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6)),
                             floatingLabelBehavior: FloatingLabelBehavior.never,
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                              color: Color(0xFFFF71CE),
+                            )),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                   color: Color.fromARGB(255, 115, 17, 201)),
                             ),
                           ),
+                          keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Insira apenas um número inteiro';
@@ -347,6 +357,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         value: dropdownValue,
                         icon: const Icon(Icons.keyboard_arrow_down),
                         style: const TextStyle(fontWeight: FontWeight.bold),
+                        underline: Container(
+                          height: 2,
+                          color: const Color(0xFFFF71CE),
+                        ),
                         dropdownColor: Colors.purple[50],
                         items: dropdownItems.map((String item) {
                           return DropdownMenuItem<String>(
@@ -361,9 +375,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 'Paginação: $newValue'; // Atualiza o valor do título
                           });
                         },
+                        alignment: Alignment
+                            .center, // Define o alinhamento do texto no centro verticalmente
                       ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
+                      const SizedBox(height: 40),
+                      FilledButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
@@ -378,7 +394,19 @@ class _MyHomePageState extends State<MyHomePage> {
                             setState(() {}); // Atualiza o estado
                           }
                         },
-                        child: const Text('Enviar'),
+                        style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all(const Size(
+                              200, 60)), // Define a largura e altura mínimas
+                          backgroundColor: MaterialStateProperty.all(
+                              Color.fromARGB(255, 199, 87,
+                                  160)), // Definindo a cor de fundo
+                        ),
+                        child: const Text('Enviar',
+                            style: TextStyle(
+                              fontSize: 16, // Tamanho do texto
+                              fontWeight: FontWeight.bold,
+                            ) // Peso da fonte
+                            ),
                       ),
 
                       const SizedBox(height: 16),
@@ -389,7 +417,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         )
-                      //resultado = '',
                     ],
                   ),
                 ),

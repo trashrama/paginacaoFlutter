@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> _entradaPages = [];
+  List<String> entradaPages = [];
 
   int? tamCache;
 
@@ -54,6 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
     int hit = 0, miss = 0;
 
     var random = Random();
+    listaMemoria.clear();
 
     for (var pag in paginas) {
       if (listaMemoria.contains(pag)) {
@@ -75,6 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<int> lru(List<int> paginas, int tamanho) {
     List<int> listaMemoria = [];
     int hit = 0, miss = 0;
+    listaMemoria.clear();
+    print(listaMemoria);
 
     for (var pag in paginas) {
       int index = listaMemoria.indexOf(pag);
@@ -97,7 +100,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<int> lfu(List<int> paginas, int tamanho) {
     Map<int, int> listaMemoria = {};
-    int hit = 0, miss = 0;
+    int hit, miss;
+    hit = miss = 0;
+    var podeEnviar = false;
+
     for (var pag in paginas) {
       if (listaMemoria.containsKey(pag)) {
         hit++;
@@ -137,6 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     //se a memoria tiver cheia, tira o primeiro e add a pagina
 
+    listaMemoria.clear();
     for (var pag in paginas) {
       if (listaMemoria.contains(pag)) {
         hit++;
@@ -181,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     if (missAndHit.isNotEmpty) {
-      return 'Total de HITS: ${missAndHit[0]}\nTotal de MISSES: ${missAndHit[1]}';
+      return 'HITS: ${missAndHit[0]} | MISSES: ${missAndHit[1]}';
     } else {
       return 'Ocorreu um erro ao executar o algoritmo de paginação.';
     }
@@ -261,21 +268,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      const Text('Digite a sequência de páginas:',
+                      const Text('Digite a sequência de páginas',
                           style: TextStyle(
                             fontSize: 15,
                             color: Color.fromARGB(255, 0, 0, 0),
                             fontFamily: 'Raleway',
-                            fontWeight: FontWeight.w300,
+                            fontWeight: FontWeight.bold,
                             fontStyle: FontStyle.normal,
                           )),
                       TextFormField(
-                        style:
-                            const TextStyle(color: Color.fromRGBO(0, 0, 0, 1)),
+                        style: const TextStyle(
+                          color: Color.fromRGBO(0, 0, 0, 1),
+                          fontSize: 15,
+                          fontFamily: 'Raleway',
+                          fontWeight: FontWeight.w200,
+                          fontStyle: FontStyle.normal,
+                        ),
                         decoration: const InputDecoration(
                           labelText: '1, 2, 3, 4',
-                          labelStyle:
-                              TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6)),
+                          labelStyle: TextStyle(
+                            color: Color.fromRGBO(0, 0, 0, 0.6),
+                            fontFamily: 'Raleway',
+                            fontSize: 15,
+                            fontWeight: FontWeight.w300,
+                            fontStyle: FontStyle.italic,
+                          ),
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                           enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
@@ -288,19 +305,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
+                            listaF.clear();
+                            entradaPages.clear();
                             return 'Insira uma sequência de números!';
                           } else {
                             if (value.contains(',')) {
-                              _entradaPages = value.split(',').toList();
+                              entradaPages = value.split(',').toList();
                             } else if (value.contains(' ')) {
-                              _entradaPages = value.split(' ').toList();
+                              entradaPages = value.split(' ').toList();
                             } else {
-                              _entradaPages = [value];
+                              entradaPages = [value];
                             }
 
-                            if (_entradaPages.isNotEmpty ||
-                                _entradaPages == []) {
-                              for (var item in _entradaPages) {
+                            if (entradaPages.isNotEmpty || entradaPages == []) {
+                              for (var item in entradaPages) {
                                 if (item.isNotEmpty) {
                                   try {
                                     int num = int.tryParse(item.trim())!;
@@ -308,6 +326,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     listaF.add(num);
                                   } catch (e) {
                                     listaF.clear();
+                                    entradaPages.clear();
                                     return 'Insira APENAS valores inteiros separados por espaço ou por vírgula!';
                                   }
                                 }
@@ -319,14 +338,31 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       const SizedBox(
                           height: 20), // separar os itens do container
-                      const Text('Digite o tamanho do cache da memória'),
+                      const Text('Digite o tamanho do cache da memória',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontSize: 15,
+                            fontFamily: 'Raleway',
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.normal,
+                          )),
                       TextFormField(
                           style: const TextStyle(
-                              color: Color.fromRGBO(0, 0, 0, 1)),
+                            color: Color.fromRGBO(0, 0, 0, 1),
+                            fontFamily: 'Raleway',
+                            fontSize: 15,
+                            fontWeight: FontWeight.w200,
+                            fontStyle: FontStyle.normal,
+                          ),
                           decoration: const InputDecoration(
                             labelText: 'Um número inteiro',
-                            labelStyle:
-                                TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6)),
+                            labelStyle: TextStyle(
+                              color: Color.fromRGBO(0, 0, 0, 0.6),
+                              fontFamily: 'Raleway',
+                              fontSize: 15,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic,
+                            ),
                             floatingLabelBehavior: FloatingLabelBehavior.never,
                             enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
@@ -340,15 +376,21 @@ class _MyHomePageState extends State<MyHomePage> {
                           keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
+                              listaF.clear();
+                              entradaPages.clear();
                               return 'Insira apenas um número inteiro';
                             }
 
                             try {
                               tamCache = int.tryParse(value)!;
                               if (tamCache! < 1) {
+                                listaF.clear();
+                                entradaPages.clear();
                                 return 'Não pode ser menor que 0';
                               }
                             } catch (e) {
+                              listaF.clear();
+                              entradaPages.clear();
                               return 'Insira apenas um número inteiro';
                             }
                             return null;
@@ -365,7 +407,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         items: dropdownItems.map((String item) {
                           return DropdownMenuItem<String>(
                             value: item,
-                            child: Text(item),
+                            child: Text(item,
+                                style: const TextStyle(
+                                  fontFamily: 'Raleway',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  fontStyle: FontStyle.normal,
+                                )),
                           );
                         }).toList(),
                         onChanged: (String? newValue) {
@@ -384,11 +432,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             // Faça algo com os valores do formulário
-                            resultado = rodaAlgoritmo(
-                                lista: listaF,
-                                tamanho: tamCache!,
-                                algoritmoUsado: dropdownValue);
-                            _entradaPages.clear();
+                            if (listaF.isNotEmpty) {
+                              resultado = rodaAlgoritmo(
+                                  lista: listaF,
+                                  tamanho: tamCache!,
+                                  algoritmoUsado: dropdownValue);
+                            }
+                            entradaPages.clear();
                             listaF.clear();
 
                             setState(() {}); // Atualiza o estado
@@ -401,11 +451,12 @@ class _MyHomePageState extends State<MyHomePage> {
                               Color.fromARGB(255, 199, 87,
                                   160)), // Definindo a cor de fundo
                         ),
-                        child: const Text('Enviar',
+                        child: const Text('ENVIAR',
                             style: TextStyle(
-                              fontSize: 16, // Tamanho do texto
-                              fontWeight: FontWeight.bold,
-                            ) // Peso da fonte
+                                fontSize: 16, // Tamanho do texto
+                                fontWeight: FontWeight.w900,
+                                fontFamily: 'Raleway',
+                                fontStyle: FontStyle.normal) // Peso da fonte
                             ),
                       ),
 

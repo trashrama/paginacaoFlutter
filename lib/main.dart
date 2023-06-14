@@ -503,18 +503,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ))),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      const Text(
-                        'by: sant/trashrama',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Raleway',
-                          fontStyle: FontStyle.normal,
-                        ),
-                      ),
+                      
                     ],
                   ),
                 ),

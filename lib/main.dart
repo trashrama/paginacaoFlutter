@@ -503,7 +503,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ))),
-                      
                     ],
                   ),
                 ),

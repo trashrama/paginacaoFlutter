@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -451,7 +453,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             // Faça algo com os valores do formulário
-                            if (listaF.isNotEmpty) {
+                            if (listaF.isNotEmpty &&
+                                tamCache.isDefinedAndNotNull) {
                               resultado = rodaAlgoritmo(
                                   lista: listaF,
                                   tamanho: tamCache!,

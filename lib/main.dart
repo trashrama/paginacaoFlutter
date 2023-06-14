@@ -102,7 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
     Map<int, int> listaMemoria = {};
     int hit, miss;
     hit = miss = 0;
-    var podeEnviar = false;
 
     for (var pag in paginas) {
       if (listaMemoria.containsKey(pag)) {
@@ -231,6 +230,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontFamily: 'IBM_Plex_Sans',
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.normal,
+                      shadows: [
+                        Shadow(
+                          color: Color.fromARGB(
+                              255, 122, 122, 122), // Cor da sombra
+                          offset: Offset(0,
+                              2), // Deslocamento da sombra (horizontal, vertical)
+                          blurRadius: 10.0, // Raio do desfoque da sombra
+                        ),
+                      ],
                     ),
                   ),
                   Container(
@@ -253,15 +261,25 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
         ),
-        body: Center(
+        body: SingleChildScrollView(
+            child: Center(
           child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 40),
               child: Container(
-                width: 400,
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.6,
                 padding: const EdgeInsets.fromLTRB(16.0, 32.0, 16.0, 0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(255, 122, 122, 122),
+                      offset: Offset(0, 2),
+                      blurRadius: 10.0,
+                      spreadRadius: 1,
+                    ),
+                  ],
                 ),
                 child: Form(
                   key: _formKey,
@@ -413,6 +431,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                   fontStyle: FontStyle.normal,
+                                  color: Colors.black,
                                 )),
                           );
                         }).toList(),
@@ -463,15 +482,28 @@ class _MyHomePageState extends State<MyHomePage> {
                       const SizedBox(height: 16),
                       const SizedBox(height: 16),
                       if (resultado != null)
-                        Text(
-                          resultado!,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        )
+                        Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color.fromARGB(
+                                    255, 153, 46, 224), // Cor da borda
+                                width: 1.0, // Espessura da borda
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                  3.0), // Raio do canto da borda
+                            ),
+                            child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  resultado!,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ))),
                     ],
                   ),
                 ),
               )),
-        ));
+        )));
   }
 }

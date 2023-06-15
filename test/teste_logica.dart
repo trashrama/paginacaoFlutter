@@ -15,12 +15,13 @@ void main() {
     entrada = stdin.readLineSync();
   }
 
-  if (entrada.contains(','))
+  if (entrada.contains(',')) {
     entradasBrutas = entrada.split(',').toList();
-  else if (entrada.contains(' '))
+  } else if (entrada.contains(' ')) {
     entradasBrutas = entrada.split(' ').toList();
-  else
+  } else {
     entradasBrutas = [entrada];
+  }
 
   if (entradasBrutas.isNotEmpty || entradasBrutas == []) {
     for (var item in entradasBrutas) {

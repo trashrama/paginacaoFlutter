@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -211,10 +209,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 221, 214, 226),
+        backgroundColor: const Color.fromARGB(255, 221, 214, 226),
         appBar: AppBar(
           toolbarHeight: 120,
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
           centerTitle: true,
           title: ValueListenableBuilder<String>(
             valueListenable: titleNotifier,
@@ -247,10 +245,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 50,
                     height: 5,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         colors: [
-                          const Color(0xFFB967FF),
-                          const Color(0xFFFF71CE)
+                          Color(0xFFB967FF),
+                          Color(0xFFFF71CE)
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -274,7 +272,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16.0),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Color.fromARGB(255, 122, 122, 122),
                       offset: Offset(0, 2),
@@ -453,8 +451,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             // Faça algo com os valores do formulário
-                            if (listaF.isNotEmpty &&
-                                tamCache.isDefinedAndNotNull) {
+                            if (listaF.isNotEmpty && tamCache! > 0) {
                               resultado = rodaAlgoritmo(
                                   lista: listaF,
                                   tamanho: tamCache!,
@@ -470,7 +467,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           minimumSize: MaterialStateProperty.all(const Size(
                               200, 60)), // Define a largura e altura mínimas
                           backgroundColor: MaterialStateProperty.all(
-                              Color.fromARGB(255, 199, 87,
+                              const Color.fromARGB(255, 199, 87,
                                   160)), // Definindo a cor de fundo
                         ),
                         child: const Text('ENVIAR',
@@ -488,7 +485,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Container(
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: Color.fromARGB(
+                                color: const Color.fromARGB(
                                     255, 153, 46, 224), // Cor da borda
                                 width: 1.0, // Espessura da borda
                               ),
@@ -496,7 +493,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   3.0), // Raio do canto da borda
                             ),
                             child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   resultado!,
                                   style: const TextStyle(

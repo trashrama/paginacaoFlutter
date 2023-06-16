@@ -4,6 +4,7 @@ import 'dart:math';
 final _formKey = GlobalKey<FormState>(); // Chave global para o formulário
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const AlgDemo());
 }
 
@@ -77,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
     List<int> listaMemoria = [];
     int hit = 0, miss = 0;
     listaMemoria.clear();
-    print(listaMemoria);
 
     for (var pag in paginas) {
       int index = listaMemoria.indexOf(pag);
@@ -246,10 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: 5,
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFFB967FF),
-                          Color(0xFFFF71CE)
-                        ],
+                        colors: [Color(0xFFB967FF), Color(0xFFFF71CE)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -287,6 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       const Text('Digite a sequência de páginas',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
                             color: Color.fromARGB(255, 0, 0, 0),
@@ -311,6 +309,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             fontWeight: FontWeight.w300,
                             fontStyle: FontStyle.italic,
                           ),
+                          alignLabelWithHint: true,
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                           enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
@@ -357,6 +356,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       const SizedBox(
                           height: 20), // separar os itens do container
                       const Text('Digite o tamanho do cache da memória',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Color.fromARGB(255, 0, 0, 0),
                             fontSize: 15,
@@ -381,6 +381,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               fontWeight: FontWeight.w300,
                               fontStyle: FontStyle.italic,
                             ),
+                            alignLabelWithHint: true,
                             floatingLabelBehavior: FloatingLabelBehavior.never,
                             enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
